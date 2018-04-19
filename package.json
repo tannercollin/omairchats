@@ -1,10 +1,12 @@
 {
   "name": "omairchats",
+  "homepage": "https://tannercollin.github.io/omairchats",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "dom-to-image": "^2.6.0",
     "file-saver": "^1.3.8",
+    "gh-pages": "^1.1.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "semantic-ui-css": "^2.3.1",
@@ -17,6 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }

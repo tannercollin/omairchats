@@ -16,7 +16,7 @@ html, body {
 }
 
 .chat__body {
-  font-family: sans;
+  font-family: sans-serif;
   font-size: 26px;
   line-height: initial;
   color: initial;
