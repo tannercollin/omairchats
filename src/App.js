@@ -31,7 +31,7 @@ class App extends Component {
 
 	saveSticker() {
 		const fileName = this.state.messageText.replace(/\W/g, '').substring(0, 16) || 'sticker';
-		domtoimage.toBlob(this.sticker.current).then(blob => {
+		domtoimage.toBlob(this.sticker.current, {width: 512}).then(blob => {
 			FileSaver.saveAs(blob, fileName + '.png');
 		});
 	}
