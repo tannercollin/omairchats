@@ -71,6 +71,7 @@ class App extends Component {
 							</div>
 						</div>
 					</section>
+					<Segment basic very padded>Source code: <a href="https://github.com/tannercollin/omairchats">https://github.com/tannercollin/omairchats</a></Segment>
 				</Container>
 			</div>
 		);
