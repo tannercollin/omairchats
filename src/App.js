@@ -99,7 +99,7 @@ class App extends Component {
 
 	saveScreenshot() {
 		this.setState({background: Background}, () => {
-			const fileName = this.state.messageText.replace(/\W/g, '').substring(0, 16) || 'screenshot';
+			const fileName = this.state.messages[0].messageText.replace(/\W/g, '').substring(0, 16) || 'screenshot';
 			domtoimage.toBlob(this.sticker.current, {width: 512}).then(blob => {
 				FileSaver.saveAs(blob, fileName + '.png');
 				this.setState({background: null});
@@ -108,7 +108,7 @@ class App extends Component {
 	}
 
 	saveSticker() {
-		const fileName = this.state.messageText.replace(/\W/g, '').substring(0, 16) || 'sticker';
+		const fileName = this.state.messages[0].messageText.replace(/\W/g, '').substring(0, 16) || 'sticker';
 		domtoimage.toBlob(this.sticker.current, {width: 512}).then(blob => {
 			FileSaver.saveAs(blob, fileName + '.png');
 		});
