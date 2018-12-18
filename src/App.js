@@ -138,7 +138,7 @@ class App extends Component {
 									<Icon name='upload' /> Upload image
 								</Button>
 							</Form.Field>
-							<Form.Field control={Input} label='Name' placeholder='S N ❄️ W M A I R' onChange={this.nameChange}/>
+							<Form.Field control={Input} label='Name' placeholder='O M A I R' onChange={this.nameChange}/>
 							<Form.Select label='Colour' placeholder='Red' options={colors} onChange={this.colorChange}/>
 						</Form.Group>
 						{messages.map((x, id) =>
@@ -170,7 +170,7 @@ class App extends Component {
 									<div className={id + 1 === messages.length ? 'message droplet' : 'message'}>
 										<div className='message__text'>
 											<div>
-												{id ? null : <div className='message__name' style={{ color: nameColor }}>{this.state.name || 'S N ❄️ W M A I R'}</div>}
+												{id ? null : <div className='message__name' style={{ color: nameColor }}>{this.state.name || 'O M A I R'}</div>}
 												{messages[id].messageText || 'What should I say?'}
 												<div className='message__time'>{messages[id].messageTime || '12:34 PM'}</div>
 											</div>
