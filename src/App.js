@@ -3,6 +3,18 @@ import domtoimage from 'dom-to-image';
 import FileSaver from 'file-saver';
 import { Button, Container, Form, Header, Icon, Input, Segment } from 'semantic-ui-react'
 import './App.css';
+import Photomair from './photomair.jpg';
+
+const colors = [
+	{ text: 'Red', value: '#c03d33' },
+	{ text: 'Green', value: '#4fad2d' },
+	{ text: 'Yellow', value: '#d09306' },
+	{ text: 'Blue', value: '#168acd' },
+	{ text: 'Purple', value: '#8544d6' },
+	{ text: 'Pink', value: '#cd4073' },
+	{ text: 'Sea', value: '#2996ad' },
+	{ text: 'Orange', value: '#ce671b' },
+];
 
 class App extends Component {
 	constructor(props) {
@@ -11,22 +23,59 @@ class App extends Component {
 		this.sticker = React.createRef();
 
 		this.state = {
+			name: '',
+			color: '',
+			image: null,
+			messages: [{
+				messageText: '',
+				messageTime: '',
+			}],
 			messageText: '',
 			messageTime: '',
 			canvas: []
 		};
 
+		this.nameChange = this.nameChange.bind(this);
+		this.colorChange = this.colorChange.bind(this);
 		this.messageChange = this.messageChange.bind(this);
 		this.timeChange = this.timeChange.bind(this);
+		this.addMessage = this.addMessage.bind(this);
 		this.saveSticker = this.saveSticker.bind(this);
 	}
 
-	messageChange(event) {
-		this.setState({messageText: event.target.value});
+	nameChange(event) {
+		this.setState({name: event.target.value});
 	}
 
-	timeChange(event) {
-		this.setState({messageTime: event.target.value});
+	colorChange(event, {value}) {
+		this.setState({color: value});
+	}
+
+	messageChange(event, id) {
+		const value = event.target.value;
+		this.setState(prevState => ({
+			messages: prevState.messages.map((x, i) =>
+				i === id ? {...x, messageText: value} : x
+			)
+		}));
+	}
+
+	timeChange(event, id) {
+		const value = event.target.value;
+		this.setState(prevState => ({
+			messages: prevState.messages.map((x, i) =>
+				i === id ? {...x, messageTime: value} : x
+			)
+		}));
+	}
+
+	addMessage() {
+		this.setState(prevState => ({
+			messages: prevState.messages.concat({
+				messageText: '',
+				messageTime: '',
+			})
+		}));
 	}
 
 	saveSticker() {
@@ -37,6 +86,10 @@ class App extends Component {
 	}
 
 	render() {
+		const messages = this.state.messages;
+		const nameColor = this.state.color || '#c03d33';
+		const image = this.state.image || `url(${Photomair})`;
+
 		return (
 			<div>
 				<Segment inverted textAlign='center' style={{ marginBottom: '2em' }} vertical>
@@ -50,8 +103,19 @@ class App extends Component {
 				<Container text>
 					<Form>
 						<Form.Group widths='equal'>
-							<Form.Field control={Input} label='Message' placeholder='What should I say?' onChange={this.messageChange}/>
-							<Form.Field control={Input} label='Time' placeholder='12:34 PM' onChange={this.timeChange}/>
+							<Form.Field control={Input} label='Name' placeholder='S N ❄️ W M A I R' onChange={this.nameChange}/>
+							<Form.Select label='Colour' placeholder='Red' options={colors} onChange={this.colorChange}/>
+						</Form.Group>
+						{messages.map((x, id) =>
+							<Form.Group widths='equal' key={id}>
+								<Form.Field control={Input} label='Message' placeholder='What should I say?' value={messages[id].messageText} onChange={(e) => this.messageChange(e, id)}/>
+								<Form.Field control={Input} label='Time' placeholder='12:34 PM' onChange={(e) => this.timeChange(e, id)}/>
+							</Form.Group>
+						)}
+						<Form.Group>
+							<Form.Field control={Button} label='&nbsp;' color='grey' icon labelPosition='left' onClick={this.addMessage}>
+								<Icon name='plus' /> Add Message
+							</Form.Field>
 							<Form.Field control={Button} label='&nbsp;' color='grey' icon labelPosition='left' onClick={this.saveSticker}>
 								<Icon name='save' /> Save
 							</Form.Field>
@@ -59,15 +123,19 @@ class App extends Component {
 					</Form>
 					<section className='chat__body'>
 						<div className='sticker' ref={this.sticker}>
-							<div className='chathead' />
+							<div className='chathead' style={{ backgroundImage: image }} />
 							<div className='messages'>
-								<div className='message droplet'>
-									<div className='message__text'>
-										<div className='message__text__content'>{this.state.messageText || 'What should I say?'}
-											<div className='message__time'>{this.state.messageTime || '12:34 PM'}</div>
+								{messages.map((x, id) =>
+									<div className={id + 1 === messages.length ? 'message droplet' : 'message'}>
+										<div className='message__text'>
+											<div>
+												{id ? null : <div className='message__name' style={{ color: nameColor }}>{this.state.name || 'S N ❄️ W M A I R'}</div>}
+												{messages[id].messageText || 'What should I say?'}
+												<div className='message__time'>{messages[id].messageTime || '12:34 PM'}</div>
+											</div>
 										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 					</section>

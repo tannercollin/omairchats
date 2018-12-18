@@ -29,16 +29,15 @@ html, body {
 .sticker {
 	width: 512px;
 	position: relative;
-  	padding-left: 10px;
+  	margin: 10px;
 }
 
 .chathead {
 	position: absolute;
-	bottom: 12px;
+	bottom: 0px;
 	width: 64px;
 	height: 64px;
 	//float: left;
-	background-image: url("./photomair.jpg");
 	background-size: contain;
 	clip-path: circle(50% at 50% 50%);
 }
@@ -63,7 +62,7 @@ html, body {
   max-width: 840px;
   
   background-color: #FFF;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   border-radius: 12px;
   
   z-index: 2;
@@ -96,8 +95,14 @@ html, body {
   box-shadow: 0 4px 2px 0 rgba(160,172,182,.5);
 }
 
-.message__text,
-.message__image__text .message__text__content {
+.message__name {
+  font-size: 26px;
+  //font-weight: 500;
+  margin-top: -6px;
+  padding-bottom: 6px;
+}
+
+.message__text {
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
