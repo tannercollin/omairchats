@@ -4,6 +4,7 @@ import FileSaver from 'file-saver';
 import { Button, Container, Form, Header, Icon, Input, Segment } from 'semantic-ui-react'
 import './App.css';
 import Photomair from './photomair.jpg';
+import Background from './background.jpg';
 
 const colors = [
 	{ text: 'Red', value: '#c03d33' },
@@ -26,6 +27,7 @@ class App extends Component {
 			name: '',
 			color: '',
 			image: null,
+			background: null,
 			messages: [{
 				messageText: '',
 				messageTime: '',
@@ -41,6 +43,8 @@ class App extends Component {
 		this.messageChange = this.messageChange.bind(this);
 		this.timeChange = this.timeChange.bind(this);
 		this.addMessage = this.addMessage.bind(this);
+		this.delMessage = this.delMessage.bind(this);
+		this.saveScreenshot = this.saveScreenshot.bind(this);
 		this.saveSticker = this.saveSticker.bind(this);
 	}
 
@@ -53,7 +57,6 @@ class App extends Component {
 	}
 
 	imageChange(event) {
-		console.log(event.target.files);
 		this.setState({
 			image: URL.createObjectURL(event.target.files[0]),
 		});
@@ -84,6 +87,24 @@ class App extends Component {
 				messageTime: '',
 			})
 		}));
+	}
+
+	delMessage(event, id) {
+		this.setState(prevState => {
+			let oldMessages = prevState.messages;
+			oldMessages.splice(id, 1);
+			return {messages: oldMessages};
+		});
+	}
+
+	saveScreenshot() {
+		this.setState({background: Background}, () => {
+			const fileName = this.state.messageText.replace(/\W/g, '').substring(0, 16) || 'screenshot';
+			domtoimage.toBlob(this.sticker.current, {width: 512}).then(blob => {
+				FileSaver.saveAs(blob, fileName + '.png');
+				this.setState({background: null});
+			});
+		});
 	}
 
 	saveSticker() {
@@ -124,19 +145,25 @@ class App extends Component {
 							<Form.Group widths='equal' key={id}>
 								<Form.Field control={Input} label='Message' placeholder='What should I say?' value={messages[id].messageText} onChange={(e) => this.messageChange(e, id)}/>
 								<Form.Field control={Input} label='Time' placeholder='12:34 PM' onChange={(e) => this.timeChange(e, id)}/>
+								<Form.Field control={Button} disabled={id === 0} label='&nbsp;' color='red' icon onClick={(e) => this.delMessage(e, id)}>
+									<Icon name='x' />
+								</Form.Field>
 							</Form.Group>
 						)}
 						<Form.Group>
 							<Form.Field control={Button} label='&nbsp;' color='grey' icon labelPosition='left' onClick={this.addMessage}>
-								<Icon name='plus' /> Add Message
+								<Icon name='plus' /> Add message
+							</Form.Field>
+							<Form.Field control={Button} label='&nbsp;' color='grey' icon labelPosition='left' onClick={this.saveScreenshot}>
+								<Icon name='save' /> Save for screenshot
 							</Form.Field>
 							<Form.Field control={Button} label='&nbsp;' color='grey' icon labelPosition='left' onClick={this.saveSticker}>
-								<Icon name='save' /> Save
+								<Icon name='save' /> Save for sticker
 							</Form.Field>
 						</Form.Group>
 					</Form>
 					<section className='chat__body'>
-						<div className='sticker' ref={this.sticker}>
+						<div className='sticker' ref={this.sticker} style={{backgroundImage: `url(${this.state.background || 'none'})`}} >
 							<div className='chathead' style={{backgroundImage: `url(${this.state.image || Photomair})`}} />
 							<div className='messages'>
 								{messages.map((x, id) =>
