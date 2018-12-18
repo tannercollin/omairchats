@@ -3,16 +3,14 @@
 }
 html, body {
   width: 100%;
-  height: 100%;
   padding: 0;
   margin: 0;
-}
-
-#root {
-  height: 100%;
   background-image: url("https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/Telegram/Resources/art/bg_initial.jpg");
   background-position-y: -54px;
   background-attachment: fixed;
+}
+
+#root {
 }
 
 .chat__body {

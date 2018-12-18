@@ -37,6 +37,7 @@ class App extends Component {
 
 		this.nameChange = this.nameChange.bind(this);
 		this.colorChange = this.colorChange.bind(this);
+		this.imageChange = this.imageChange.bind(this);
 		this.messageChange = this.messageChange.bind(this);
 		this.timeChange = this.timeChange.bind(this);
 		this.addMessage = this.addMessage.bind(this);
@@ -49,6 +50,13 @@ class App extends Component {
 
 	colorChange(event, {value}) {
 		this.setState({color: value});
+	}
+
+	imageChange(event) {
+		console.log(event.target.files);
+		this.setState({
+			image: URL.createObjectURL(event.target.files[0]),
+		});
 	}
 
 	messageChange(event, id) {
@@ -88,7 +96,6 @@ class App extends Component {
 	render() {
 		const messages = this.state.messages;
 		const nameColor = this.state.color || '#c03d33';
-		const image = this.state.image || `url(${Photomair})`;
 
 		return (
 			<div>
@@ -103,6 +110,13 @@ class App extends Component {
 				<Container text>
 					<Form>
 						<Form.Group widths='equal'>
+							<input hidden type='file' onChange={this.imageChange} className='inputfile' id='fileinput' />
+							<Form.Field>
+								<label>&nbsp;</label>
+								<Button icon labelposition='left' as='label' color='green' htmlFor='fileinput'>
+									<Icon name='upload' /> Upload image
+								</Button>
+							</Form.Field>
 							<Form.Field control={Input} label='Name' placeholder='S N ❄️ W M A I R' onChange={this.nameChange}/>
 							<Form.Select label='Colour' placeholder='Red' options={colors} onChange={this.colorChange}/>
 						</Form.Group>
@@ -123,7 +137,7 @@ class App extends Component {
 					</Form>
 					<section className='chat__body'>
 						<div className='sticker' ref={this.sticker}>
-							<div className='chathead' style={{ backgroundImage: image }} />
+							<div className='chathead' style={{backgroundImage: `url(${this.state.image || Photomair})`}} />
 							<div className='messages'>
 								{messages.map((x, id) =>
 									<div className={id + 1 === messages.length ? 'message droplet' : 'message'}>
